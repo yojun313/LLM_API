@@ -13,6 +13,8 @@ app.use(bodyParser.json());
 app.post('/api/process', (req, res) => {
     const { model_name, question } = req.body;
 
+    console.log(req.body)
+
     if (!model_name || !question) {
         return res.status(400).send({ error: 'Both model_name and question are required' });
     }

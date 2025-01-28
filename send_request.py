@@ -6,7 +6,7 @@ url = "http://121.152.225.232:3333/api/process"
 # 전송할 데이터
 data = {
     "model_name": "deepseek-r1:14b",
-    "question": "What is the capital of South Korea?"
+    "question": "Who are you?"
 }
 
 try:
