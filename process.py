@@ -19,12 +19,11 @@ def generator(model, text):
 
 def main():
     # 입력 받기
-    input_data = sys.stdin.read()
-    data = json.loads(input_data)
+    input_data = json.loads(sys.argv[1])
 
     # 모델 이름과 질문 처리
-    model_name = data.get("model_name")
-    question = data.get("question")
+    model_name = input_data["model_name"]
+    question = input_data["question"]
 
     if not model_name or not question:
         print("Both model_name and question are required {data}", file=sys.stderr)
@@ -35,6 +34,5 @@ def main():
     # 결과 반환
     print(answer)
 
-if __name__ == "__main__":
-    main()
+main()
 
