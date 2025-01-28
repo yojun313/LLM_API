@@ -27,7 +27,7 @@ def main():
     question = data.get("question")
 
     if not model_name or not question:
-        print("Both model_name and question are required", file=sys.stderr)
+        print("Both model_name and question are required {data}", file=sys.stderr)
         return
 
     answer = generator(model_name, question)

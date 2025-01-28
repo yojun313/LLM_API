@@ -1,10 +1,11 @@
 import requests
 
 # 서버 URL
-url = "http://localhost:3000/api/process"
+url = "http://121.152.225.232:3333/api/process"
 
 # 전송할 데이터
 data = {
+    "model_name": "deepseek-r1:14b",
     "question": "What is the capital of South Korea?"
 }
 
@@ -20,3 +21,4 @@ try:
 
 except requests.exceptions.RequestException as e:
     print("Error communicating with the server:", e)
+
