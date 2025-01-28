@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="281e2c2c-788a-4845-99c8-95854dc284f2" name="변경" comment="" />
+    <list default="true" id="281e2c2c-788a-4845-99c8-95854dc284f2" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,6 +27,9 @@
     &quot;accountId&quot;: &quot;457f2a56-1479-481c-9505-b785256505ee&quot;
   }
 }</component>
+  <component name="PerforceDirect.Settings">
+    <option name="CHARSET" value="없음" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -61,7 +69,7 @@
       <option name="presentableId" value="Default" />
       <updated>1738077345106</updated>
       <workItem from="1738077346232" duration="99000" />
-      <workItem from="1738079248110" duration="388000" />
+      <workItem from="1738079248110" duration="662000" />
     </task>
     <servers />
   </component>
