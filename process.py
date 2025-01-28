@@ -7,7 +7,7 @@ def generator(model, text):
     from langchain_ollama import OllamaLLM
 
 
-    llm = OllamaLLM(model="deepseek-r1:14b")
+    llm = OllamaLLM(model=model)
 
     template = text
 
