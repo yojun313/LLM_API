@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { spawn } = require('child_process');
+const path = require('path');
 
 const app = express();
 const port = 3333;
@@ -16,29 +17,29 @@ app.post('/api/process', (req, res) => {
         return res.status(400).send({ error: 'Both model_name and question are required' });
     }
 
-    // Python 스크립트 실행
-    const python = spawn('python3', ['process.py']);
+    // Python 스크립트 실행 (특정 경로 지정)
+    const scriptPath = path.join(__dirname, 'process.py'); // Python 파일의 경로 설정
+    const globalInputData = { model_name, question };
+
+    const pythonProcess = spawn('python', ['-u', scriptPath, JSON.stringify(globalInputData)]);
 
     let pythonOutput = '';
 
-    python.stdout.on('data', (data) => {
+    pythonProcess.stdout.on('data', (data) => {
         pythonOutput += data.toString();
     });
 
-    python.stderr.on('data', (data) => {
+    pythonProcess.stderr.on('data', (data) => {
         console.error(`Python Error: ${data}`);
     });
 
-    python.on('close', (code) => {
+    pythonProcess.on('close', (code) => {
         if (code !== 0) {
+            console.error(`Python script exited with code ${code}`);
             return res.status(500).send({ error: 'Python script failed' });
         }
         res.send({ result: pythonOutput.trim() });
     });
-
-    // Python 코드에 입력 전달
-    python.stdin.write(JSON.stringify({ model_name, question }));
-    python.stdin.end();
 });
 
 // 서버 실행
