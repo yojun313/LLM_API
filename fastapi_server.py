@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import datetime
 from langchain.prompts import PromptTemplate
@@ -45,9 +45,12 @@ def save_to_file(model_name, question, answer, filename="C:/GitHub/llm_history.t
         file.write(f"{model_name}: {answer}\n")
         file.write("=" * 50 + "\n")  # 구분선 추가
 
-@app.post("/generate")
+@app.post("/api/process")
 async def generate_response(data: RequestData):
-    """ 요청된 모델로 질문을 처리하고 결과 반환 """
+    """ 요청된 모델로 질문을 처리하고 결과 반환 (Node.js와 동일한 요청 방식) """
+    if not data.model_name or not data.question:
+        raise HTTPException(status_code=400, detail="Both model_name and question are required")
+
     answer = generator(data.model_name, data.question)
     save_to_file(data.model_name, data.question, answer)
     return {"result": answer}
