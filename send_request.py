@@ -35,4 +35,4 @@ if __name__ == "__main__":
     ]
     
     question = "너를 만든 회사를 소개해줘"
-    LLM_API(question, llm_list[5])
+    LLM_API(question, llm_list[3])
