@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="281e2c2c-788a-4845-99c8-95854dc284f2" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LLM_Chat.exe" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +127,7 @@
       <workItem from="1738079248110" duration="662000" />
       <workItem from="1738105156431" duration="598000" />
       <workItem from="1738127640904" duration="10665000" />
-      <workItem from="1738166242062" duration="603000" />
+      <workItem from="1738166242062" duration="1326000" />
     </task>
     <servers />
   </component>
