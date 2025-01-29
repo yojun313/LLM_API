@@ -42,10 +42,10 @@ def save_to_file(model_name, question, answer, filename="C:/GitHub/llm_history.t
     """ 모델 이름, 질문, 답변을 파일에 저장 """
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(filename, "a", encoding="utf-8") as file:
-        file.write(f"[ {timestamp} ]\n")
-        file.write(f"Question: {question}\n")
-        file.write(f"{model_name}: {answer}\n")
-        file.write("=" * 50 + "\n")  # 구분선 추가
+        file.write(f"[ {timestamp} ] - {model_name}\n")
+        file.write(f"Q. {question}\n")
+        file.write(f"A. {answer}\n")
+        file.write("=" * 50 + "\n\n")  # 구분선 추가
 
 @app.post("/api/process")
 async def generate_response(data: RequestData):
