@@ -9,29 +9,24 @@ from langchain_ollama import OllamaLLM
 
 app = FastAPI()
 
-# 🔹 사용할 LLM 모델 리스트
-llm_list = [
-    'deepseek-r1:14b',
-    'llama3.1-instruct-8b',
-    'deepseek-r1:70b',
-    'llama3.3',
-    'gemma:7b',
-    'gemma2:27b'
-]
-
-# 🔹 모델 캐싱 (서버 시작 시 모든 모델을 미리 생성)
-ollama_cache = {model: OllamaLLM(model=model, streaming=True, num_threads=4) for model in llm_list}
+# 🔹 모델 캐싱 (초기에는 None, 요청이 오면 생성)
+ollama_cache = {
+    "current_model": None,  # 현재 활성화된 모델 이름
+    "llm_instance": None   # 현재 활성화된 모델 객체
+}
 
 class RequestData(BaseModel):
     model_name: str
     question: str
 
 def generator(model, text):
-    """ 요청된 모델이 미리 캐싱되어 있다면 바로 사용 """
-    if model not in ollama_cache:
-        return f"Error: Model '{model}' is not available."
+    """ 모델이 요청될 때만 생성하고 유지하며, 다른 모델 요청 시 교체 """
+    if ollama_cache["current_model"] != model:
+        print(f"🔄 모델 변경: {ollama_cache['current_model']} → {model}")
+        ollama_cache["llm_instance"] = OllamaLLM(model=model, streaming=True, num_threads=4)
+        ollama_cache["current_model"] = model
 
-    llm = ollama_cache[model]
+    llm = ollama_cache["llm_instance"]
     prompt = PromptTemplate.from_template(template=text)
     chain = prompt | llm | StrOutputParser()
 
@@ -49,7 +44,7 @@ def save_to_file(model_name, question, answer, filename="C:/GitHub/llm_history.t
 
 @app.post("/api/process")
 async def generate_response(data: RequestData):
-    """ 요청된 모델로 질문을 처리하고 결과 반환 (Node.js와 동일한 요청 방식) """
+    """ 첫 요청이 오면 모델을 생성하고 유지, 다른 모델 요청이 오면 교체 """
     if not data.model_name or not data.question:
         raise HTTPException(status_code=400, detail="Both model_name and question are required")
     
@@ -59,5 +54,7 @@ async def generate_response(data: RequestData):
 
 @app.get("/models")
 async def get_models():
-    """ 현재 캐싱된 모델 목록을 반환 """
-    return {"available_models": list(ollama_cache.keys())}
+    """ 현재 활성화된 모델을 반환 """
+    return {
+        "current_model": ollama_cache["current_model"]
+    }
