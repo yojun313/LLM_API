@@ -22,7 +22,6 @@ class RequestData(BaseModel):
 def generator(model, text):
     """ 모델이 요청될 때만 생성하고 유지하며, 다른 모델 요청 시 교체 """
     if ollama_cache["current_model"] != model:
-        print(f"🔄 모델 변경: {ollama_cache['current_model']} → {model}")
         ollama_cache["llm_instance"] = OllamaLLM(model=model, streaming=True, num_threads=4)
         ollama_cache["current_model"] = model
 
