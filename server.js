@@ -19,7 +19,6 @@ app.post('/api/process', (req, res) => {
 
     // Python 스크립트 실행 (특정 경로 지정)
     const scriptPath = path.join(__dirname, 'process.py'); // Python 파일의 경로 설정
-    console.log(scriptPath)
     const globalInputData = { model_name, question };
 
     const pythonProcess = spawn('python', ['-u', scriptPath, JSON.stringify(globalInputData)]);
@@ -39,7 +38,13 @@ app.post('/api/process', (req, res) => {
             console.error(`Python script exited with code ${code}`);
             return res.status(500).send({ error: 'Python script failed' });
         }
-        res.send({ result: pythonOutput.trim() });
+        const outputFilePath = 'C:/GitHub/LLM_API/result.txt'; // 파이썬에서 저장한 파일 경로
+        fs.readFile(outputFilePath, 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading file:', err);
+                return res.status(500).send({ error: 'Failed to read output file' });
+            }            
+            res.send({ result: data });
     });
 });
 
