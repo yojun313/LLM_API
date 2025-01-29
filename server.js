@@ -19,6 +19,7 @@ app.post('/api/process', (req, res) => {
 
     // Python 스크립트 실행 (특정 경로 지정)
     const scriptPath = path.join(__dirname, 'process.py'); // Python 파일의 경로 설정
+    console.log(scriptPath)
     const globalInputData = { model_name, question };
 
     const pythonProcess = spawn('python', ['-u', scriptPath, JSON.stringify(globalInputData)]);
@@ -43,8 +44,17 @@ app.post('/api/process', (req, res) => {
             if (err) {
                 console.error('Error reading file:', err);
                 return res.status(500).send({ error: 'Failed to read output file' });
-            }            
+            }
+
+            // 파일을 성공적으로 읽은 후 그 데이터를 클라이언트로 전송
             res.send({ result: data });
+        });
+        fs.unlink(outputFilePath, (err) => {
+            if (err) {
+                console.error('Error deleting file:', err);
+                // 파일 삭제 실패는 응답에 영향을 주지 않음
+            }
+        });
     });
 });
 
