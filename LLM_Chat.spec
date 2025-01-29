@@ -31,5 +31,5 @@ exe = EXE(
     strip=False,
     upx=True,  # UPX 압축 활성화 (선택 사항)
     console=True,  # 콘솔 창 숨김 (GUI 프로그램일 경우)
-    icon='C:/GitHub/BIGMACLAB/LLM_API/source/exe_icon.ico',  # 아이콘 추가
+    icon='C:/GitHub/LLM_API/source/exe_icon.ico',  # 아이콘 추가
 )
