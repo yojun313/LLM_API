@@ -1,3 +1,6 @@
+print("[ LLM Chat Booting Process ]")
+print()
+print("Importing Libraries...", end='')
 import pymysql
 import pandas as pd
 from email.mime.multipart import MIMEMultipart
@@ -11,7 +14,7 @@ import json
 import random
 import socket
 from datetime import datetime
-
+print("Done")
 
 SERVER_IP = '121.152.225.232'
 
@@ -21,8 +24,6 @@ class LLM_Chat:
         self.api_url = f"http://{SERVER_IP}:3333/api/process"
         self.log = ''
 
-        print("[ LLM Chat Booting Process ]")
-        print()
         print("Checking Internet Connection... ", end='')
         self.check_internet_connection()
         print("Done")
