@@ -5,6 +5,8 @@ from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_ollama import OllamaLLM
 
+# uvicorn fastapi_server:app --host 127.0.0.1 --port 3333 --reload
+
 app = FastAPI()
 
 # 🔹 사용할 LLM 모델 리스트
