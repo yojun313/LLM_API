@@ -34,5 +34,5 @@ if __name__ == "__main__":
         'gemma2:27b'
     ]
     
-    question = "너를 만든 회사를 소개해줘"
+    question = "너는 누구야? 한국어로만 대답해"
     LLM_API(question, llm_list[2])
