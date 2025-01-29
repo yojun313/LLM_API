@@ -3,7 +3,7 @@
 block_cipher = None
 
 a = Analysis(
-    ['LLM_Chat.py'],  # Python 파일 이름
+    ['C:/GitHub/LLM_API/LLM_Chat.py'],  # Python 파일 이름
     pathex=['.'],
     binaries=[],
     datas=[],  # 추가할 데이터 파일이 있을 경우 여기에 추가
