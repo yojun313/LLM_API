@@ -25,5 +25,14 @@ def LLM_API(question, model_name = "deepseek-r1:14b"):
 
 
 if __name__ == "__main__":
-    question = "널 소개해봐"
-    LLM_API(question)
+    llm_list = [
+        'deepseek-r1:14b',
+        'llama3.1-instruct-8b',
+        'deepseek-r1:70b',
+        'llama3.3',
+        'gemma:7b',
+        'gemma2:27b'
+    ]
+    
+    question = "너를 만든 회사를 소개해줘"
+    LLM_API(question, llm_list[5])
