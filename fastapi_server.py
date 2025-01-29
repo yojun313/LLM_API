@@ -52,7 +52,11 @@ async def generate_response(data: RequestData):
     """ 요청된 모델로 질문을 처리하고 결과 반환 (Node.js와 동일한 요청 방식) """
     if not data.model_name or not data.question:
         raise HTTPException(status_code=400, detail="Both model_name and question are required")
-
+    filename = 'test.txt'
+    
+    with open(filename, "a", encoding="utf-8") as file:
+        file.write("test")  # 구분선 추가
+    
     answer = generator(data.model_name, data.question)
     save_to_file(data.model_name, data.question, answer)
     return {"result": answer}
