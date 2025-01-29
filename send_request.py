@@ -25,5 +25,5 @@ def LLM_API(question, model_name = "deepseek-r1:14b"):
 
 
 if __name__ == "__main__":
-    question = "너는 누구야?"
+    question = "널 소개해봐"
     LLM_API(question)

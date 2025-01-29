@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { spawn } = require('child_process');
 const path = require('path');
-
+const fs = require('fs');
 const app = express();
 const port = 3333;
 
@@ -19,7 +19,6 @@ app.post('/api/process', (req, res) => {
 
     // Python 스크립트 실행 (특정 경로 지정)
     const scriptPath = path.join(__dirname, 'process.py'); // Python 파일의 경로 설정
-    console.log(scriptPath)
     const globalInputData = { model_name, question };
 
     const pythonProcess = spawn('python', ['-u', scriptPath, JSON.stringify(globalInputData)]);
