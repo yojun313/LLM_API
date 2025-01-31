@@ -1,3 +1,17 @@
+##############################################################################################################
+# Project Name: LLM_Chat
+# Version: 1.0.0
+# Developer: Moon Yo Jun (POSTECH, Computer Science and Engineering)
+# Date Created: 2025-01-29
+# Released: 2024-01-29
+#
+# Contact:
+# - Email: yojun313@postech.ac.kr / moonyojun@gmail.com
+# - Phone: +82-10-4072-9190
+##############################################################################################################
+
+
+
 print("[ LLM Chat Booting Process ]")
 print()
 print("Importing Libraries...", end='')
