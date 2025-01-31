@@ -38,7 +38,7 @@ def save_to_file(model_name, question, answer, filename="C:/GitHub/llm_history.t
     with open(filename, "a", encoding="utf-8") as file:
         file.write(f"[ {timestamp} ] - {model_name}\n")
         file.write(f"Q. {question}\n")
-        file.write(f"A. {answer}\n")
+        file.write(f"A. {answer}\n\n")
         file.write("=" * 50 + "\n\n")  # 구분선 추가
 
 @app.post("/api/process")
