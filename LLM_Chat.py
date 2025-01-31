@@ -13,10 +13,18 @@ import sys
 import json
 import random
 import socket
+from rich.console import Console
+from rich.table import Table
+from rich.prompt import Prompt
+from rich.live import Live
+from rich.panel import Panel
 from datetime import datetime
+from prompt_toolkit import prompt
+from prompt_toolkit.completion import Completer, Completion
 print("Done")
 
 SERVER_IP = '121.152.225.232'
+console = Console()
 
 class LLM_Chat:
     def __init__(self):
@@ -41,63 +49,80 @@ class LLM_Chat:
         self.model_chat()
 
     def login(self):
+        print("Connecting to user database...")
         self.mySQL_obj.connectDB('user_db')
         userDF = self.mySQL_obj.TableToDataframe('user_info')
+
         user_data = [(name, email, key) for _, name, email, key in userDF.itertuples(index=False, name=None)]
         self.userNameList = [name for name, _, key in user_data]
         self.userMailList = [email for _, email, key in user_data]
 
+        console.print("Connecting to device database...")
         self.mySQL_obj.connectDB('bigmaclab_manager_db')
         userDF = self.mySQL_obj.TableToDataframe('device_list')
+
         device_data = [(user, device) for _, device, user in userDF.itertuples(index=False, name=None)]
         device_data = sorted(device_data, key=lambda x: (not x[0][0].isalpha(), x[0]))
 
-        # userNameList 및 userKeyList 업데이트
         self.device_list = [device for name, device in device_data]
         self.user_list = [name for name, device in device_data]
 
         current_device = socket.gethostname()
         self.user_device = current_device
+
         if current_device in self.device_list:
             self.user = self.user_list[self.device_list.index(current_device)]
             self.usermail = self.userMailList[self.userNameList.index(self.user)]
             return True
         else:
             self.clear_console()
-            answer = input("Device is not registered. Would you register this device? (Y/n) ")
+            answer = Prompt.ask(
+                "[bold yellow]Device is not registered. Would you like to register this device? (Y/n)[/bold yellow]",
+                default="Y"
+            )
+
             if answer.lower() == 'y':
                 self.clear_console()
-                print("[ Login Process ]")
-                username = input("User Name: ")
+                console.print("[bold cyan][ Login Process ][/bold cyan]\n")
+
+                username = Prompt.ask("[bold green]Enter your User Name[/bold green]")
 
                 if username not in self.userNameList:
-                    print('\nUser name is not registered\nQuit program')
+                    console.print(
+                        "\n[bold red]❌ User name is not registered![/bold red]\n[bold red]Exiting program...[/bold red]")
                     return False
 
                 self.user = username
                 self.usermail = self.userMailList[self.userNameList.index(username)]
 
-                print("\nSending authorization code...")
+                console.print("\n[bold cyan]📨 Sending authorization code...[/bold cyan]")
+
+                # 인증 코드 생성 및 전송
                 random_pw = ''.join(random.choices('0123456789', k=6))
                 msg = (
                     f"사용자: {self.user}\n"
                     f"디바이스: {current_device}\n"
-                     f"인증 번호 '{random_pw}'를 입력하십시오"
+                    f"인증 번호 '{random_pw}'를 입력하십시오"
                 )
                 self.send_email(self.usermail, "LLM Chat 디바이스 등록 인증번호", msg)
-                print(f"\nAuthorization code was sent to {self.user}'s {self.usermail}\nCheck your code and type here")
-                pw = input("Code: ")
+
+                console.print(
+                    f"\n[bold yellow]✅ Authorization code was sent to {self.user}'s email: {self.usermail}[/bold yellow]")
+
+                # 인증 코드 입력
+                pw = Prompt.ask("[bold green]Enter the received code[/bold green]")
+
                 if pw == random_pw:
                     self.mySQL_obj.insertToTable('device_list', [[current_device, username]])
                     self.mySQL_obj.commit()
-                    print("Device is registered")
+                    console.print("[bold green]✅ Device successfully registered![/bold green]\n")
                     return True
                 else:
-                    print('\nAuthorization number is not correct\n\nQuit program')
+                    console.print(
+                        "\n[bold red]❌ Authorization code is incorrect![/bold red]\n[bold red]Exiting program...[/bold red]")
                     return False
 
     def model_selection(self):
-        print("Importing LLM model list...")
         self.mySQL_obj.connectDB('bigmaclab_manager_db')
         configDF = self.mySQL_obj.TableToDataframe('configuration')
         self.CONFIG = dict(zip(configDF[configDF.columns[1]], configDF[configDF.columns[2]]))
@@ -107,61 +132,81 @@ class LLM_Chat:
         self.LLM_list = [(value, key) for key, value in LLM_json.items()]
         self.LLM_list = sorted(self.LLM_list, key=lambda x: x[0])
 
-        self.LLM_list.remove(('ChatGPT 4', 'ChatGPT'))
+        # 특정 모델 제외
+        self.LLM_list = [model for model in self.LLM_list if model[0] != 'ChatGPT 4']
 
-        print("\nChoose LLM model: ")
+        # 테이블 생성
+        table = Table(title="[bold yellow]Available LLM Models[/bold yellow]", show_header=True,
+                      header_style="bold magenta")
+        table.add_column("No.", justify="center", style="cyan", width=5)
+        table.add_column("Model Name", style="bold white")
+
         for index, model in enumerate(self.LLM_list, start=1):
-            print(f"{index}. {model[0]}")
+            table.add_row(str(index), model[0])
 
+        console.print(table)
+
+        # 사용자 입력 받기
         while True:
-            num = int(input("\nEnter model number: "))
-            if num in range(1, len(self.LLM_list) + 1):
-                break
-            else:
-                print("\nInvalid number")
+            try:
+                num = int(Prompt.ask("\n[bold green]Enter model number[/bold green]"))
+                if 1 <= num <= len(self.LLM_list):
+                    break
+                else:
+                    console.print("[bold red]Invalid number! Please choose a valid model number.[/bold red]")
+            except ValueError:
+                console.print("[bold red]Invalid input! Please enter a number.[/bold red]")
 
         self.LLM_model_name = self.LLM_list[num - 1][0]
         self.LLM_model = self.LLM_list[num - 1][1]
 
-    def model_chat(self):
+        console.print(f"\n[bold cyan]Selected Model:[/bold cyan] [bold green]{self.LLM_model_name}[/bold green]\n")
 
+    def model_chat(self):
         def add_to_log(message):
             """출력 메시지를 로그에 추가"""
             self.log += f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - {message}\n"
 
         def see_help():
-            print()
-            help = (
-                "Available Commands:\n"
-                "  /model                      Change LLM model\n"
-                "  /save                       Save chat history\n"
-                "  /clear                      Delete chat history\n"
-                "  /quit                       Quit Program\n"
-            )
-            print(help)
+            console.print(Panel.fit(
+                "[bold cyan]Available Commands[/bold cyan]\n"
+                "  [green]/model[/green]  - Change LLM model\n"
+                "  [green]/save[/green]   - Save chat history\n"
+                "  [green]/clear[/green]  - Delete chat history\n"
+                "  [green]/quit[/green]   - Quit Program",
+                title="[bold magenta]Help[/bold magenta]"
+            ))
 
+        # 자동완성 기능 추가
+        commands = ["/model", "/save", "/clear", "/quit", "/?"]
+        command_completer = SlashCompleter(commands)
 
         self.clear_console()
-        print(f"[ {self.LLM_model_name} Chat ]\n")
-        print("Type '/?' to see available commands\n")
+        console.print(Panel.fit(f"[bold yellow]{self.LLM_model_name}[/bold yellow]", title="LLM Model"))
+        console.print("Type [green]'/?'[/green] to see available commands\n")
 
         while True:
-            query = input(f"User >>> ")
+            query = prompt("\nUser >>> ", completer=command_completer)
 
             if query == '/?':
                 see_help()
                 continue
 
-            if self.commands(query) == True:
+            if self.commands(query):
                 continue
 
             add_to_log(f"User >>> {query}\n")
 
-            print()
+            with Live(console=console, refresh_per_second=10) as live:
+                live.update(Panel(f"[bold blue]{self.LLM_model_name} >>> [cyan]Generating Response...[/cyan]",
+                                  title="AI Response", border_style="blue"))
 
-            print(f"{self.LLM_model_name} >>> Generating...", end='\r')
-            answer = self.model_answer(query)
-            print(f"{self.LLM_model_name} >>> {answer}\n")
+                answer = self.model_answer(query)
+
+                # 응답을 같은 위치에 업데이트하여 출력
+                live.update(Panel(f"[bold blue]{self.LLM_model_name} >>>[/bold blue] {answer}", title="AI Response",
+                                  border_style="green"))
+
             add_to_log(f"{self.LLM_model_name} >>> {answer}\n")
 
     def commands(self, query):
@@ -187,6 +232,8 @@ class LLM_Chat:
             return True
         elif query == '/clear':
             self.clear_console()
+            console.print(Panel.fit(f"[bold yellow]{self.LLM_model_name}[/bold yellow]", title="LLM Model"))
+            console.print("Type [green]'/?'[/green] to see available commands\n")
             return True
         elif query == '/quit':
             sys.exit()
@@ -410,6 +457,19 @@ class mySQL:
         except Exception as e:
             print(f"Failed to insert data into {tableName}")
             print(str(e))
+
+class SlashCompleter(Completer):
+    """ '/' 입력 시에만 자동완성 제안이 활성화되는 Completer """
+    def __init__(self, commands):
+        self.commands = commands
+
+    def get_completions(self, document, complete_event):
+        text = document.text_before_cursor
+
+        if text.startswith("/"):  # '/' 입력했을 때만 자동완성 작동
+            for command in self.commands:
+                if command.startswith(text):  # 입력된 텍스트와 일치하는 명령어만 제안
+                    yield Completion(command, start_position=-len(text))
 
 if __name__ == '__main__':
     LLM_Chat_obj = LLM_Chat()

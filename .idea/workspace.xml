@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="281e2c2c-788a-4845-99c8-95854dc284f2" name="변경" comment="" />
+    <list default="true" id="281e2c2c-788a-4845-99c8-95854dc284f2" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LLM_Chat.py" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_Chat.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -127,6 +130,7 @@
       <workItem from="1738127640904" duration="10665000" />
       <workItem from="1738166242062" duration="1326000" />
       <workItem from="1738169413541" duration="8000" />
+      <workItem from="1738330148880" duration="1415000" />
     </task>
     <servers />
   </component>
@@ -134,7 +138,7 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/LLM_API$LLM_Chat.coverage" NAME="LLM_Chat 커버리지 결과" MODIFIED="1738149520753" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/LLM_API$LLM_Chat.coverage" NAME="LLM_Chat 커버리지 결과" MODIFIED="1738331525858" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/LLM_API$send_request.coverage" NAME="send_request 커버리지 결과" MODIFIED="1738077350050" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
