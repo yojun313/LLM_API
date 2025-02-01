@@ -19,6 +19,7 @@ import pymysql
 import pandas as pd
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from getmac import get_mac_address
 import smtplib
 import platform
 import requests
@@ -75,16 +76,18 @@ class LLM_Chat:
         self.mySQL_obj.connectDB('bigmaclab_manager_db')
         userDF = self.mySQL_obj.TableToDataframe('device_list')
 
-        device_data = [(user, device) for _, device, user in userDF.itertuples(index=False, name=None)]
+        device_data = [(user, device, mac) for _, device, user, mac in userDF.itertuples(index=False, name=None)]
         device_data = sorted(device_data, key=lambda x: (not x[0][0].isalpha(), x[0]))
 
-        self.device_list = [device for name, device in device_data]
-        self.user_list = [name for name, device in device_data]
+        self.device_list = [device for name, device, mac in device_data]
+        self.user_list = [name for name, device, mac in device_data]
+        self.mac_list = [mac for name, device, mac in device_data]
 
         current_device = socket.gethostname()
+        current_mac = get_mac_address()
         self.user_device = current_device
 
-        if current_device in self.device_list:
+        if current_device in self.device_list and current_mac in self.mac_list:
             self.user = self.user_list[self.device_list.index(current_device)]
             self.usermail = self.userMailList[self.userNameList.index(self.user)]
             return True
