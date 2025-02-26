@@ -5,7 +5,7 @@ from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_ollama import OllamaLLM
 
-# uvicorn api_server:app --host 0.0.0.0 --port 3333 --reload
+# uvicorn server_api:app --host 0.0.0.0 --port 3333 --reload
 
 app = FastAPI()
 
