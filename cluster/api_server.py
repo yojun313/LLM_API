@@ -14,7 +14,7 @@ class RequestModel(BaseModel):
     stream: bool = False
 
 
-@app.post("/generate")
+@app.post("/api/process")
 def generate_text(request: RequestModel):
     """
     외부에서 받은 요청을 내부 Ollama 컨테이너로 전달하고 응답을 반환
