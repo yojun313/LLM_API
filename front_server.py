@@ -1,6 +1,7 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, WebSocket, HTTPException
 import requests
 from pydantic import BaseModel
+import json
 
 app = FastAPI()
 
@@ -14,18 +15,25 @@ class RequestModel(BaseModel):
     stream: bool = False
 
 
-@app.post("/generate")
-def generate_text(request: RequestModel):
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
     """
-    외부에서 받은 요청을 내부 Ollama 컨테이너로 전달하고 응답을 반환
+    WebSocket을 통해 클라이언트와 통신하고, 내부 Ollama 컨테이너와 데이터를 주고받음
     """
+    await websocket.accept()  # 클라이언트의 연결 수락
     try:
-        # Ollama 컨테이너로 요청 전송
-        response = requests.post(OLLAMA_API_URL, json=request.dict())
+        while True:
+            # 클라이언트로부터 JSON 데이터 수신
+            data = await websocket.receive_text()
+            request_data = json.loads(data)  # JSON 형식으로 변환
 
-        # Ollama의 응답을 외부 클라이언트로 반환
-        return response.json()
+            # Ollama 컨테이너로 요청 전송
+            response = requests.post(OLLAMA_API_URL, json=request_data)
+            response_data = response.json()
 
-    except requests.exceptions.RequestException as e:
-        raise HTTPException(status_code=500, detail=f"Ollama 컨테이너 요청 실패: {str(e)}")
+            # Ollama의 응답을 WebSocket을 통해 클라이언트에게 전송
+            await websocket.send_text(json.dumps(response_data))
 
+    except Exception as e:
+        await websocket.close()
+        raise HTTPException(status_code=500, detail=f"WebSocket 통신 오류: {str(e)}")
