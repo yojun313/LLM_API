@@ -16,8 +16,8 @@ ollama_cache = {
 }
 
 class RequestData(BaseModel):
-    model_name: str
-    question: str
+    model: str
+    prompt: str
 
 def generator(model, text):
     """ 모델이 요청될 때만 생성하고 유지하며, 다른 모델 요청 시 교체 """
@@ -32,23 +32,23 @@ def generator(model, text):
     result = chain.invoke({})
     return result
 
-def save_to_file(model_name, question, answer, filename="C:/GitHub/llm_history.txt"):
+def save_to_file(model, prompt, answer, filename="C:/GitHub/llm_history.txt"):
     """ 모델 이름, 질문, 답변을 파일에 저장 """
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(filename, "a", encoding="utf-8") as file:
-        file.write(f"[ {timestamp} ] - {model_name}\n")
-        file.write(f"Q. {question}\n")
+        file.write(f"[ {timestamp} ] - {model}\n")
+        file.write(f"Q. {prompt}\n")
         file.write(f"A. {answer}\n\n")
         file.write("=" * 50 + "\n\n")  # 구분선 추가
 
 @app.post("/api/process")
 async def generate_response(data: RequestData):
     """ 첫 요청이 오면 모델을 생성하고 유지, 다른 모델 요청이 오면 교체 """
-    if not data.model_name or not data.question:
-        raise HTTPException(status_code=400, detail="Both model_name and question are required")
+    if not data.model or not data.prompt:
+        raise HTTPException(status_code=400, detail="Both model and prompt are required")
     
-    answer = generator(data.model_name, data.question)
-    save_to_file(data.model_name, data.question, answer)
+    answer = generator(data.model, data.prompt)
+    save_to_file(data.model, data.prompt, answer)
     return {"result": answer}
 
 @app.get("/models")

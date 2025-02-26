@@ -18,8 +18,8 @@ ollama_cache = {
 
 
 class RequestData(BaseModel):
-    model_name: str
-    question: str
+    model: str
+    prompt: str
 
 
 def generator(model, text):
@@ -36,12 +36,12 @@ def generator(model, text):
     return result
 
 
-def save_to_file(model_name, question, answer, filename="C:/GitHub/llm_history.txt"):
+def save_to_file(model, prompt, answer, filename="C:/GitHub/llm_history.txt"):
     """ 모델 이름, 질문, 답변을 파일에 저장 """
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(filename, "a", encoding="utf-8") as file:
-        file.write(f"[ {timestamp} ] - {model_name}\n")
-        file.write(f"Q. {question}\n")
+        file.write(f"[ {timestamp} ] - {model}\n")
+        file.write(f"Q. {prompt}\n")
         file.write(f"A. {answer}\n\n")
         file.write("=" * 50 + "\n\n")  # 구분선 추가
 
@@ -57,24 +57,24 @@ async def websocket_endpoint(websocket: WebSocket):
             request_data = json.loads(data)  # JSON 파싱
 
             # 필수 데이터 체크
-            if "model_name" not in request_data or "question" not in request_data:
-                await websocket.send_text(json.dumps({"error": "Both model_name and question are required"}))
+            if "model" not in request_data or "prompt" not in request_data:
+                await websocket.send_text(json.dumps({"error": "Both model and prompt are required"}))
                 continue
 
-            model_name = request_data["model_name"]
-            question = request_data["question"]
+            model = request_data["model"]
+            prompt = request_data["prompt"]
 
             # LLM 응답 생성
-            answer = generator(model_name, question)
+            answer = generator(model, prompt)
 
             # 응답 저장
-            save_to_file(model_name, question, answer)
+            save_to_file(model, prompt, answer)
 
             # 결과를 WebSocket을 통해 전송
             await websocket.send_text(json.dumps({"result": answer}))
 
     except WebSocketDisconnect:
-        print("🔴 클라이언트가 WebSocket 연결을 종료했습니다.")
+        pass
     except Exception as e:
         await websocket.send_text(json.dumps({"error": f"서버 오류: {str(e)}"}))
 
