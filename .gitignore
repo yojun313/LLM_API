@@ -2,6 +2,7 @@
 node_modules/
 package-lock.json
 package.json
+llm_history.txt
 *.pyc
 *.xml
 # PyCharm 관련 파일 및 폴더 무시

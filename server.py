@@ -4,6 +4,7 @@ import datetime
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_ollama import OllamaLLM
+import os
 
 # uvicorn server_api:app --host 0.0.0.0 --port 3333 --reload
 
@@ -32,7 +33,7 @@ def generator(model, text):
     result = chain.invoke({})
     return result
 
-def save_to_file(model, prompt, answer, filename="C:/GitHub/llm_history.txt"):
+def save_to_file(model, prompt, answer, filename=os.path.join(os.path.dirname(__file__), "llm_history.txt")):
     """ 모델 이름, 질문, 답변을 파일에 저장 """
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(filename, "a", encoding="utf-8") as file:
@@ -48,7 +49,7 @@ async def generate_response(data: RequestData):
         raise HTTPException(status_code=400, detail="Both model and prompt are required")
     
     answer = generator(data.model, data.prompt)
-    save_to_file(data.model, data.prompt, answer)
+    #save_to_file(data.model, data.prompt, answer)
     return {"response": answer}
 
 @app.get("/models")

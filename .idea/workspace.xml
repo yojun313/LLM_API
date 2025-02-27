@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="281e2c2c-788a-4845-99c8-95854dc284f2" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LLM_Chat.py" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_Chat.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/server.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,7 +146,7 @@
       <workItem from="1740572793973" duration="60000" />
       <workItem from="1740572880757" duration="4957000" />
       <workItem from="1740592433819" duration="4466000" />
-      <workItem from="1740635618697" duration="343000" />
+      <workItem from="1740635618697" duration="1632000" />
     </task>
     <servers />
   </component>
