@@ -283,7 +283,7 @@ class LLM_Chat:
 
             # 응답 확인
             if response.status_code == 200:
-                result = response.json()['result']
+                result = response.json()['response']
                 result = result.replace('<think>', '').replace('</think>', '').replace('\n\n', '')
                 return result
             else:

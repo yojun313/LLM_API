@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="281e2c2c-788a-4845-99c8-95854dc284f2" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LLM_Chat.py" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_Chat.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/server.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,12 +147,24 @@
       <workItem from="1740571698146" duration="5000" />
       <workItem from="1740572793973" duration="60000" />
       <workItem from="1740572880757" duration="4957000" />
-      <workItem from="1740592433819" duration="595000" />
+      <workItem from="1740592433819" duration="4466000" />
+      <workItem from="1740635618697" duration="343000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/server.py</url>
+          <line>49</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/LLM_API$LLM_Chat.coverage" NAME="LLM_Chat 커버리지 결과" MODIFIED="1740575775303" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />

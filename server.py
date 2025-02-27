@@ -49,7 +49,7 @@ async def generate_response(data: RequestData):
     
     answer = generator(data.model, data.prompt)
     save_to_file(data.model, data.prompt, answer)
-    return {"result": answer}
+    return {"response": answer}
 
 @app.get("/models")
 async def get_models():
